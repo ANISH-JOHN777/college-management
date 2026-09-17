@@ -18,17 +18,22 @@ const MIME_TYPES = {
     '.css': 'text/css',
     '.js': 'text/javascript',
     '.json': 'application/json',
+    '.svg': 'image/svg+xml',
     '.png': 'image/png',
     '.jpg': 'image/jpeg',
     '.ico': 'image/x-icon'
 };
 
 const server = http.createServer((req, res) => {
-    // Strip query parameters
-    const safeUrl = req.url.split('?')[0];
+    let safeUrl = req.url.split('?')[0];
+    
+    // Handle favicon.ico fallback request to favicon.svg
+    if (safeUrl === '/favicon.ico') {
+        safeUrl = '/favicon.svg';
+    }
+
     let filePath = path.join(PUBLIC_DIR, safeUrl === '/' ? 'index.html' : safeUrl);
 
-    // Prevent directory traversal
     if (!filePath.startsWith(PUBLIC_DIR)) {
         res.writeHead(403);
         res.end('403 Forbidden');
