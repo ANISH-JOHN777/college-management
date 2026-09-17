@@ -1,3 +1,2 @@
-# Ignore local dev server script so Vercel deploys strictly as a static website
-server.js
+# Exclude CLI files from Vercel deployment
 standalone/

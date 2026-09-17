@@ -1,0 +1,9 @@
+{
+  "name": "college-management",
+  "version": "1.0.0",
+  "description": "College Department Management System",
+  "private": true,
+  "scripts": {
+    "build": "echo 'Static site build complete'"
+  }
+}
