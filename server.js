@@ -1,8 +1,8 @@
 /**
  * server.js
  * -----------------------------------------------------
- * Lightweight static HTTP server for serving the College
- * Department Management System web app locally.
+ * Dual-mode entrypoint for local execution and Vercel.
+ * Serves index.html, style.css, favicon.ico, favicon.svg, and JS assets.
  * -----------------------------------------------------
  */
 
@@ -19,23 +19,27 @@ const MIME_TYPES = {
     '.js': 'text/javascript',
     '.json': 'application/json',
     '.svg': 'image/svg+xml',
+    '.ico': 'image/x-icon',
     '.png': 'image/png',
-    '.jpg': 'image/jpeg',
-    '.ico': 'image/x-icon'
+    '.jpg': 'image/jpeg'
 };
 
-const server = http.createServer((req, res) => {
-    let safeUrl = req.url.split('?')[0];
+function handleRequest(req, res) {
+    let safeUrl = (req.url || '/').split('?')[0];
     
-    // Handle favicon.ico fallback request to favicon.svg
-    if (safeUrl === '/favicon.ico') {
-        safeUrl = '/favicon.svg';
+    if (safeUrl === '/' || safeUrl === '') {
+        safeUrl = '/index.html';
     }
 
-    let filePath = path.join(PUBLIC_DIR, safeUrl === '/' ? 'index.html' : safeUrl);
+    if (safeUrl === '/favicon.ico') {
+        const icoPath = path.join(PUBLIC_DIR, 'favicon.ico');
+        safeUrl = fs.existsSync(icoPath) ? '/favicon.ico' : '/favicon.svg';
+    }
+
+    const filePath = path.join(PUBLIC_DIR, safeUrl);
 
     if (!filePath.startsWith(PUBLIC_DIR)) {
-        res.writeHead(403);
+        res.statusCode = 403;
         res.end('403 Forbidden');
         return;
     }
@@ -45,26 +49,33 @@ const server = http.createServer((req, res) => {
 
     fs.readFile(filePath, (err, content) => {
         if (err) {
-            if (err.code === 'ENOENT') {
-                res.writeHead(404, { 'Content-Type': 'text/html' });
-                res.end('<h1>404 Not Found</h1>');
-            } else {
-                res.writeHead(500, { 'Content-Type': 'text/html' });
-                res.end('<h1>500 Internal Server Error</h1>');
-            }
-        } else {
-            res.writeHead(200, {
-                'Content-Type': contentType,
-                'Cache-Control': 'no-cache'
+            const indexPath = path.join(PUBLIC_DIR, 'index.html');
+            fs.readFile(indexPath, (indexErr, indexContent) => {
+                if (indexErr) {
+                    res.statusCode = 404;
+                    res.end('404 Not Found');
+                } else {
+                    res.setHeader('Content-Type', 'text/html');
+                    res.statusCode = 200;
+                    res.end(indexContent);
+                }
             });
-            res.end(content, 'utf-8');
+        } else {
+            res.setHeader('Content-Type', contentType);
+            res.setHeader('Cache-Control', 'public, max-age=3600');
+            res.statusCode = 200;
+            res.end(content);
         }
     });
-});
+}
 
-server.listen(PORT, () => {
-    console.log(`\n=============================================`);
-    console.log(`College Management Web App running at:`);
-    console.log(`http://localhost:${PORT}/`);
-    console.log(`=============================================\n`);
-});
+// Export for Vercel Serverless Function Entrypoint
+module.exports = handleRequest;
+
+// Run standalone server if started via command line (node server.js)
+if (require.main === module) {
+    const server = http.createServer(handleRequest);
+    server.listen(PORT, () => {
+        console.log(`Server running at http://localhost:${PORT}/`);
+    });
+}

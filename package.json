@@ -2,7 +2,7 @@
   "name": "college-management",
   "version": "1.0.0",
   "description": "College Department Management System",
-  "main": "index.js",
+  "main": "server.js",
   "private": true,
   "scripts": {
     "start": "node server.js",
