@@ -2,8 +2,10 @@
   "name": "college-management",
   "version": "1.0.0",
   "description": "College Department Management System",
+  "main": "index.js",
   "private": true,
   "scripts": {
-    "build": "echo 'Static site build complete'"
+    "start": "node server.js",
+    "build": "echo 'Build complete'"
   }
 }
