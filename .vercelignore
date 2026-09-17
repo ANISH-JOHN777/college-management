@@ -1,0 +1,3 @@
+# Ignore local dev server script so Vercel deploys strictly as a static website
+server.js
+standalone/
