@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Department Management System</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Style -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- ===================================================== -->
+        <!-- HEADER -->
+        <!-- ===================================================== -->
+        <header class="app-header">
+            <div class="header-brand">
+                <div class="brand-icon">
+                    <i data-lucide="graduation-cap"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>College Department Management System</h1>
+                    <p class="subtitle">Academic Administration Portal</p>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <div class="dept-selector-wrapper">
+                    <i data-lucide="building-2" class="icon-sm"></i>
+                    <label for="globalDeptSelect">Department:</label>
+                    <select id="globalDeptSelect" class="dept-dropdown"></select>
+                </div>
+                <button id="resetDataBtn" class="btn btn-secondary btn-sm">
+                    <i data-lucide="rotate-ccw" class="icon-sm"></i> Reset Sample Data
+                </button>
+            </div>
+        </header>
+
+        <!-- ===================================================== -->
+        <!-- MAIN BODY (SIDEBAR + CONTENT AREA) -->
+        <!-- ===================================================== -->
+        <div class="app-body">
+            <!-- SIDEBAR NAVIGATION -->
+            <nav class="app-sidebar">
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#dashboard" class="nav-link active" data-tab="dashboard">
+                            <i data-lucide="layout-dashboard"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#departments" class="nav-link" data-tab="departments">
+                            <i data-lucide="building"></i>
+                            <span>Departments</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#students" class="nav-link" data-tab="students">
+                            <i data-lucide="users"></i>
+                            <span>Students</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#faculty" class="nav-link" data-tab="faculty">
+                            <i data-lucide="user-check"></i>
+                            <span>Faculty</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#courses" class="nav-link" data-tab="courses">
+                            <i data-lucide="book-open"></i>
+                            <span>Courses</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#workflow" class="nav-link" data-tab="workflow">
+                            <i data-lucide="git-merge"></i>
+                            <span>Workflows</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#algorithms" class="nav-link" data-tab="algorithms">
+                            <i data-lucide="code-2"></i>
+                            <span>Algorithms</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="sidebar-footer">
+                    <div class="academic-badge">
+                        Department Admin v1.0
+                    </div>
+                </div>
+            </nav>
+
+            <!-- MAIN CONTENT PANELS -->
+            <main class="app-content">
+                
+                <!-- ----------------------------------------------------- -->
+                <!-- 1. DASHBOARD VIEW -->
+                <!-- ----------------------------------------------------- -->
+                <section id="dashboard" class="tab-panel active">
+                    <div class="panel-header">
+                        <h2>Dashboard</h2>
+                        <p>Overview of departments, enrollment statistics, and recent updates</p>
+                    </div>
+
+                    <!-- Global Metric Cards -->
+                    <div class="metrics-grid">
+                        <div class="metric-card card-purple">
+                            <div class="metric-icon"><i data-lucide="building"></i></div>
+                            <div class="metric-data">
+                                <span class="metric-value" id="dashTotalDepts">0</span>
+                                <span class="metric-label">Total Departments</span>
+                            </div>
+                        </div>
+
+                        <div class="metric-card card-blue">
+                            <div class="metric-icon"><i data-lucide="users"></i></div>
+                            <div class="metric-data">
+                                <span class="metric-value" id="dashTotalStudents">0</span>
+                                <span class="metric-label">Total Students</span>
+                            </div>
+                        </div>
+
+                        <div class="metric-card card-green">
+                            <div class="metric-icon"><i data-lucide="user-check"></i></div>
+                            <div class="metric-data">
+                                <span class="metric-value" id="dashTotalFaculty">0</span>
+                                <span class="metric-label">Total Faculty</span>
+                            </div>
+                        </div>
+
+                        <div class="metric-card card-amber">
+                            <div class="metric-icon"><i data-lucide="book-open"></i></div>
+                            <div class="metric-data">
+                                <span class="metric-value" id="dashTotalCourses">0</span>
+                                <span class="metric-label">Total Courses</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Active Department Overview & Recent Activity -->
+                    <div class="dashboard-grid">
+                        <div class="card active-dept-card">
+                            <div class="card-header">
+                                <h3><i data-lucide="building-2"></i> Active Department Overview</h3>
+                                <span class="badge badge-primary" id="activeDeptBadge">IT</span>
+                            </div>
+                            <div class="card-body">
+                                <h4 id="activeDeptTitle">Information Technology</h4>
+                                <p class="hod-name">HOD: <strong id="activeDeptHOD">Dr. Kumar</strong></p>
+                                <div class="dept-stats-row">
+                                    <div class="stat-pill">
+                                        <i data-lucide="users"></i>
+                                        <span id="activeDeptStudents">0 Students</span>
+                                    </div>
+                                    <div class="stat-pill">
+                                        <i data-lucide="user-check"></i>
+                                        <span id="activeDeptFaculty">0 Faculty</span>
+                                    </div>
+                                    <div class="stat-pill">
+                                        <i data-lucide="book-open"></i>
+                                        <span id="activeDeptCourses">0 Courses</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card activity-log-card">
+                            <div class="card-header">
+                                <h3><i data-lucide="history"></i> Activity Log</h3>
+                            </div>
+                            <div class="card-body">
+                                <ul class="activity-list" id="recentActivityList"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ----------------------------------------------------- -->
+                <!-- 2. DEPARTMENTS SECTION -->
+                <!-- ----------------------------------------------------- -->
+                <section id="departments" class="tab-panel">
+                    <div class="panel-header action-header">
+                        <div>
+                            <h2>Departments</h2>
+                            <p>Manage college departments and switch active department</p>
+                        </div>
+                        <button class="btn btn-primary" id="openAddDeptModalBtn">
+                            <i data-lucide="plus"></i> Add Department
+                        </button>
+                    </div>
+
+                    <div class="departments-grid" id="departmentsGrid"></div>
+                </section>
+
+                <!-- ----------------------------------------------------- -->
+                <!-- 3. STUDENT MANAGEMENT -->
+                <!-- ----------------------------------------------------- -->
+                <section id="students" class="tab-panel">
+                    <div class="panel-header action-header">
+                        <div>
+                            <h2>Student Directory</h2>
+                            <p>Records for <strong class="current-dept-name">IT</strong> Department</p>
+                        </div>
+                        <div class="button-group">
+                            <button class="btn btn-outline" id="sortStudentsBtn" title="Sorts students alphabetically using insertion sort">
+                                <i data-lucide="arrow-down-a-z"></i> Sort by Name (Insertion Sort)
+                            </button>
+                            <button class="btn btn-primary" id="openAddStudentModalBtn">
+                                <i data-lucide="user-plus"></i> Add Student
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="search-bar-card">
+                        <div class="search-input-group">
+                            <i data-lucide="search" class="search-icon"></i>
+                            <input type="text" id="studentSearchInput" placeholder="Search student ID, name, roll number, or program...">
+                            <span class="search-tag">Linear Search O(n)</span>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table" id="studentsTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Roll No</th>
+                                    <th>Year</th>
+                                    <th>Program</th>
+                                    <th>Email</th>
+                                    <th>Enrolled Courses</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentsTableBody"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ----------------------------------------------------- -->
+                <!-- 4. FACULTY MANAGEMENT -->
+                <!-- ----------------------------------------------------- -->
+                <section id="faculty" class="tab-panel">
+                    <div class="panel-header action-header">
+                        <div>
+                            <h2>Faculty Directory</h2>
+                            <p>Teaching staff for <strong class="current-dept-name">IT</strong> Department</p>
+                        </div>
+                        <button class="btn btn-primary" id="openAddFacultyModalBtn">
+                            <i data-lucide="plus"></i> Add Faculty
+                        </button>
+                    </div>
+
+                    <div class="search-bar-card">
+                        <div class="search-input-group">
+                            <i data-lucide="search" class="search-icon"></i>
+                            <input type="text" id="facultySearchInput" placeholder="Search employee ID, name, designation, or specialization...">
+                            <span class="search-tag">Linear Search O(n)</span>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table" id="facultyTable">
+                            <thead>
+                                <tr>
+                                    <th>Emp ID</th>
+                                    <th>Name</th>
+                                    <th>Designation</th>
+                                    <th>Specialization</th>
+                                    <th>Email</th>
+                                    <th>Assigned Courses</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="facultyTableBody"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ----------------------------------------------------- -->
+                <!-- 5. COURSE MANAGEMENT -->
+                <!-- ----------------------------------------------------- -->
+                <section id="courses" class="tab-panel">
+                    <div class="panel-header action-header">
+                        <div>
+                            <h2>Course Offerings</h2>
+                            <p>Curriculum details for <strong class="current-dept-name">IT</strong> Department</p>
+                        </div>
+                        <button class="btn btn-primary" id="openAddCourseModalBtn">
+                            <i data-lucide="plus"></i> Add Course
+                        </button>
+                    </div>
+
+                    <div class="search-bar-card">
+                        <div class="search-input-group">
+                            <i data-lucide="search" class="search-icon"></i>
+                            <input type="text" id="courseSearchInput" placeholder="Search course code or name...">
+                            <span class="search-tag">Linear Search O(n)</span>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table" id="coursesTable">
+                            <thead>
+                                <tr>
+                                    <th>Course Code</th>
+                                    <th>Course Name</th>
+                                    <th>Credits</th>
+                                    <th>Instructor</th>
+                                    <th>Enrolled Students</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="coursesTableBody"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ----------------------------------------------------- -->
+                <!-- 6. WORKFLOW SECTION -->
+                <!-- ----------------------------------------------------- -->
+                <section id="workflow" class="tab-panel">
+                    <div class="panel-header">
+                        <h2>Operation Workflows</h2>
+                        <p>Step-by-step process visualization for course enrollment and faculty assignments</p>
+                    </div>
+
+                    <div class="workflow-grid">
+                        <!-- Enrollment Workflow -->
+                        <div class="card workflow-card">
+                            <div class="card-header">
+                                <h3><i data-lucide="user-plus"></i> Student Course Enrollment</h3>
+                            </div>
+                            <div class="card-body">
+                                <form id="enrollWorkflowForm" class="workflow-form">
+                                    <div class="form-group">
+                                        <label for="wfStudentSelect">Select Student:</label>
+                                        <select id="wfStudentSelect" class="form-control" required></select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="wfCourseSelect">Select Course:</label>
+                                        <select id="wfCourseSelect" class="form-control" required></select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-block">
+                                        <i data-lucide="play"></i> Run Enrollment Workflow
+                                    </button>
+                                </form>
+
+                                <div class="pipeline-container" id="enrollmentPipeline">
+                                    <h4>Workflow Pipeline:</h4>
+                                    <div class="pipeline-steps">
+                                        <div class="p-step" id="pstep1"><span class="step-num">1</span> Student Selected</div>
+                                        <div class="p-step" id="pstep2"><span class="step-num">2</span> Course Selected</div>
+                                        <div class="p-step" id="pstep3"><span class="step-num">3</span> Linear Search Student</div>
+                                        <div class="p-step" id="pstep4"><span class="step-num">4</span> Linear Search Course</div>
+                                        <div class="p-step" id="pstep5"><span class="step-num">5</span> Duplicate Membership Check</div>
+                                        <div class="p-step" id="pstep6"><span class="step-num">6</span> Enroll & Update State</div>
+                                    </div>
+                                    <div class="workflow-log-box" id="enrollmentLogBox">
+                                        Select student and course to begin enrollment workflow.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Faculty Assignment Workflow -->
+                        <div class="card workflow-card">
+                            <div class="card-header">
+                                <h3><i data-lucide="user-check"></i> Faculty Course Assignment</h3>
+                            </div>
+                            <div class="card-body">
+                                <form id="assignWorkflowForm" class="workflow-form">
+                                    <div class="form-group">
+                                        <label for="wfFacultySelect">Select Faculty Member:</label>
+                                        <select id="wfFacultySelect" class="form-control" required></select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="wfAssignCourseSelect">Select Course:</label>
+                                        <select id="wfAssignCourseSelect" class="form-control" required></select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-block">
+                                        <i data-lucide="play"></i> Run Assignment Workflow
+                                    </button>
+                                </form>
+
+                                <div class="pipeline-container" id="assignmentPipeline">
+                                    <h4>Workflow Pipeline:</h4>
+                                    <div class="pipeline-steps">
+                                        <div class="p-step" id="fstep1"><span class="step-num">1</span> Select Faculty</div>
+                                        <div class="p-step" id="fstep2"><span class="step-num">2</span> Select Course</div>
+                                        <div class="p-step" id="fstep3"><span class="step-num">3</span> Find Faculty Record</div>
+                                        <div class="p-step" id="fstep4"><span class="step-num">4</span> Find Course Record</div>
+                                        <div class="p-step" id="fstep5"><span class="step-num">5</span> Assign & Save</div>
+                                    </div>
+                                    <div class="workflow-log-box" id="assignmentLogBox">
+                                        Select faculty and course to begin assignment workflow.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ----------------------------------------------------- -->
+                <!-- 7. ALGORITHMS SECTION -->
+                <!-- ----------------------------------------------------- -->
+                <section id="algorithms" class="tab-panel">
+                    <div class="panel-header">
+                        <h2>Algorithms & Complexity</h2>
+                        <p>Detailed performance benchmarks and visual step traces for core algorithms</p>
+                    </div>
+
+                    <!-- Complexity Matrix Table -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h3><i data-lucide="table"></i> Algorithm Complexity Overview</h3>
+                        </div>
+                        <div class="card-body p-0">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Operation</th>
+                                        <th>Algorithm</th>
+                                        <th>Best Case</th>
+                                        <th>Average Case</th>
+                                        <th>Worst Case</th>
+                                        <th>Space Complexity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Search Student / Faculty / Course</td>
+                                        <td><strong>Linear Search</strong></td>
+                                        <td><span class="badge badge-success">O(1)</span></td>
+                                        <td><span class="badge badge-warning">O(n)</span></td>
+                                        <td><span class="badge badge-danger">O(n)</span></td>
+                                        <td><span class="badge badge-info">O(1)</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sort Students Alphabetically</td>
+                                        <td><strong>Insertion Sort</strong></td>
+                                        <td><span class="badge badge-success">O(n)</span></td>
+                                        <td><span class="badge badge-warning">O(n²)</span></td>
+                                        <td><span class="badge badge-danger">O(n²)</span></td>
+                                        <td><span class="badge badge-info">O(1)</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Duplicate Enrollment Check</td>
+                                        <td><strong>Linear Membership Check</strong></td>
+                                        <td><span class="badge badge-success">O(1)</span></td>
+                                        <td><span class="badge badge-warning">O(n)</span></td>
+                                        <td><span class="badge badge-danger">O(n)</span></td>
+                                        <td><span class="badge badge-info">O(1)</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Algorithm Visualizer Cards -->
+                    <div class="algorithms-grid">
+                        <div class="card algo-card">
+                            <div class="card-header">
+                                <h3><i data-lucide="search"></i> 1. Linear Search</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>Sequentially checks each element in the array until the target key matches.</p>
+                                
+                                <div class="code-block">
+<pre><code>linearSearch(array, target, key):
+    for i = 0 to length(array) - 1:
+        if array[i][key] == target:
+            return array[i]
+    return null</code></pre>
+                                </div>
+
+                                <div class="visualizer-box">
+                                    <h4>Live Visual Trace:</h4>
+                                    <div class="search-demo-controls">
+                                        <input type="text" id="algoSearchTarget" placeholder="Target ID (e.g. S003)" value="S003">
+                                        <button class="btn btn-sm btn-primary" id="runSearchDemoBtn">Run Trace</button>
+                                    </div>
+                                    <div class="array-visualizer" id="searchArrayVis"></div>
+                                    <div class="algo-status-msg" id="searchAlgoMsg">Click button to run linear search trace.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card algo-card">
+                            <div class="card-header">
+                                <h3><i data-lucide="arrow-down-a-z"></i> 2. Insertion Sort</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>Sorts student array alphabetically by name in-place without built-in sort functions.</p>
+                                
+                                <div class="code-block">
+<pre><code>insertionSort(array, key):
+    for i = 1 to length(array) - 1:
+        currentItem = array[i]
+        j = i - 1
+        while j >= 0 and array[j][key] > currentItem[key]:
+            array[j + 1] = array[j]
+            j = j - 1
+        array[j + 1] = currentItem</code></pre>
+                                </div>
+
+                                <div class="visualizer-box">
+                                    <h4>Live Visual Trace:</h4>
+                                    <div class="sort-demo-controls">
+                                        <button class="btn btn-sm btn-primary" id="runSortDemoBtn">Run Trace</button>
+                                    </div>
+                                    <div class="array-visualizer" id="sortArrayVis"></div>
+                                    <div class="algo-status-msg" id="sortAlgoMsg">Click button to run insertion sort trace.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- MODALS -->
+    <!-- ===================================================== -->
+
+    <!-- Department Modal -->
+    <div class="modal" id="deptModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="deptModalTitle">Add Department</h3>
+                <button class="close-modal-btn">&times;</button>
+            </div>
+            <form id="deptForm">
+                <input type="hidden" id="deptFormMode" value="add">
+                <div class="form-group">
+                    <label for="deptIdInput">Department Code (ID):</label>
+                    <input type="text" id="deptIdInput" class="form-control" placeholder="e.g. AI" required>
+                </div>
+                <div class="form-group">
+                    <label for="deptNameInput">Department Name:</label>
+                    <input type="text" id="deptNameInput" class="form-control" placeholder="e.g. Artificial Intelligence" required>
+                </div>
+                <div class="form-group">
+                    <label for="deptHodInput">HOD Name:</label>
+                    <input type="text" id="deptHodInput" class="form-control" placeholder="e.g. Dr. Sharma" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary close-modal-btn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Department</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Student Modal -->
+    <div class="modal" id="studentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="studentModalTitle">Add Student</h3>
+                <button class="close-modal-btn">&times;</button>
+            </div>
+            <form id="studentForm">
+                <input type="hidden" id="studentFormMode" value="add">
+                <div class="form-row">
+                    <div class="form-group col">
+                        <label for="studentIdInput">Student ID:</label>
+                        <input type="text" id="studentIdInput" class="form-control" placeholder="e.g. S005" required>
+                    </div>
+                    <div class="form-group col">
+                        <label for="studentRollInput">Roll Number:</label>
+                        <input type="text" id="studentRollInput" class="form-control" placeholder="e.g. 23IT005" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="studentNameInput">Full Name:</label>
+                    <input type="text" id="studentNameInput" class="form-control" placeholder="e.g. Rahul Sharma" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col">
+                        <label for="studentEmailInput">Email:</label>
+                        <input type="email" id="studentEmailInput" class="form-control" placeholder="rahul@college.edu" required>
+                    </div>
+                    <div class="form-group col">
+                        <label for="studentPhoneInput">Phone:</label>
+                        <input type="text" id="studentPhoneInput" class="form-control" placeholder="9876543210" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col">
+                        <label for="studentYearInput">Academic Year:</label>
+                        <select id="studentYearInput" class="form-control" required>
+                            <option value="1">Year 1</option>
+                            <option value="2">Year 2</option>
+                            <option value="3" selected>Year 3</option>
+                            <option value="4">Year 4</option>
+                        </select>
+                    </div>
+                    <div class="form-group col">
+                        <label for="studentProgramInput">Program:</label>
+                        <input type="text" id="studentProgramInput" class="form-control" placeholder="e.g. B.Tech IT" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary close-modal-btn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Student</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Faculty Modal -->
+    <div class="modal" id="facultyModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="facultyModalTitle">Add Faculty</h3>
+                <button class="close-modal-btn">&times;</button>
+            </div>
+            <form id="facultyForm">
+                <input type="hidden" id="facultyFormMode" value="add">
+                <div class="form-row">
+                    <div class="form-group col">
+                        <label for="facultyIdInput">Faculty ID:</label>
+                        <input type="text" id="facultyIdInput" class="form-control" placeholder="e.g. F003" required>
+                    </div>
+                    <div class="form-group col">
+                        <label for="facultyEmpIdInput">Employee ID:</label>
+                        <input type="text" id="facultyEmpIdInput" class="form-control" placeholder="e.g. EMP003" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="facultyNameInput">Full Name:</label>
+                    <input type="text" id="facultyNameInput" class="form-control" placeholder="e.g. Dr. Ananya" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col">
+                        <label for="facultyEmailInput">Email:</label>
+                        <input type="email" id="facultyEmailInput" class="form-control" placeholder="ananya@college.edu" required>
+                    </div>
+                    <div class="form-group col">
+                        <label for="facultyPhoneInput">Phone:</label>
+                        <input type="text" id="facultyPhoneInput" class="form-control" placeholder="9123456789" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col">
+                        <label for="facultyDesigInput">Designation:</label>
+                        <select id="facultyDesigInput" class="form-control" required>
+                            <option value="Professor">Professor</option>
+                            <option value="Associate Professor">Associate Professor</option>
+                            <option value="Assistant Professor" selected>Assistant Professor</option>
+                            <option value="Lecturer">Lecturer</option>
+                        </select>
+                    </div>
+                    <div class="form-group col">
+                        <label for="facultySpecInput">Specialization:</label>
+                        <input type="text" id="facultySpecInput" class="form-control" placeholder="e.g. Machine Learning" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary close-modal-btn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Faculty</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Course Modal -->
+    <div class="modal" id="courseModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="courseModalTitle">Add Course</h3>
+                <button class="close-modal-btn">&times;</button>
+            </div>
+            <form id="courseForm">
+                <input type="hidden" id="courseFormMode" value="add">
+                <div class="form-row">
+                    <div class="form-group col">
+                        <label for="courseIdInput">Course Code:</label>
+                        <input type="text" id="courseIdInput" class="form-control" placeholder="e.g. CS304" required>
+                    </div>
+                    <div class="form-group col">
+                        <label for="courseCreditsInput">Credits:</label>
+                        <input type="number" id="courseCreditsInput" class="form-control" min="1" max="6" value="4" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="courseNameInput">Course Name:</label>
+                    <input type="text" id="courseNameInput" class="form-control" placeholder="e.g. Operating Systems" required>
+                </div>
+                <div class="form-group">
+                    <label for="courseFacultySelect">Assign Faculty (Optional):</label>
+                    <select id="courseFacultySelect" class="form-control"></select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary close-modal-btn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Course</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- View Enrolled Students Modal -->
+    <div class="modal" id="viewStudentsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="viewStudentsModalTitle">Enrolled Students</h3>
+                <button class="close-modal-btn">&times;</button>
+            </div>
+            <div class="modal-body" id="viewStudentsModalBody"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary close-modal-btn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- App Scripts -->
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
